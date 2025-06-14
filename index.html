@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEET UG 2025 Result Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8f0fe;
+      margin: 0;
+      padding: 0;
+    }
+    .login-container, .result-card {
+      width: 95%;
+      max-width: 720px;
+      margin: 30px auto;
+      background: #fff;
+      border: 2px solid #003366;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 12px;
+    }
+    .nta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #003366;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .nta-header img {
+      height: 60px;
+    }
+    .nta-header h1 {
+      font-size: 20px;
+      color: #003366;
+      text-align: center;
+      flex-grow: 1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #000;
+    }
+    th, td {
+      padding: 8px;
+      font-size: 14px;
+    }
+    .photo {
+      width: 120px;
+    }
+    .photo img {
+      width: 100%;
+      height: auto;
+    }
+    #viewPassToggle {
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    input {
+      padding: 8px;
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #005599;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="login-container" id="loginSection">
+  <h2 style="color:#003366;text-align:center;">NEET UG 2025 Result Login</h2>
+  <input type="text" id="appNo" placeholder="Application Number">
+  <input type="date" id="dob">
+  <input type="password" id="password" placeholder="Password">
+  <label><input type="checkbox" onclick="togglePassword()"> Show Password</label><br>
+  <button onclick="login()">Submit</button>
+</div>
+
+<div class="result-card hidden" id="resultCard">
+  <div class="nta-header">
+    <img src="https://www.nta.ac.in/sites/default/files/2023-12/NTA-Logo.png" alt="NTA Logo" onerror="this.src='broken.png'">
+    <h1>NATIONAL ELIGIBILITY CUM ENTRANCE TEST (UG) - 2025<br>Score Card</h1>
+    <img src="broken.png" alt="Candidate Photo" class="photo" id="studentPhoto">
+  </div>
+
+  <table>
+    <tr><td><strong>Roll Number</strong></td><td id="rollNo"></td><td><strong>Application No.</strong></td><td id="appNumResult"></td></tr>
+    <tr><td><strong>Candidate's Name</strong></td><td id="name"></td><td><strong>Nationality</strong></td><td>Indian</td></tr>
+    <tr><td><strong>Mother's Name</strong></td><td id="mother"></td><td><strong>Date of Birth</strong></td><td id="dobResult"></td></tr>
+    <tr><td><strong>Father's Name</strong></td><td id="father"></td><td><strong>Gender</strong></td><td id="gender"></td></tr>
+  </table>
+
+  <h3 style="margin-top: 20px;">Percentile Score Obtained</h3>
+  <table>
+    <tr><th>Subject</th><th>Score</th></tr>
+    <tr><td>Physics</td><td id="phy"></td></tr>
+    <tr><td>Chemistry</td><td id="chem"></td></tr>
+    <tr><td>Biology (Botany & Zoology)</td><td id="bio"></td></tr>
+    <tr><th>Total</th><th><span id="total"></span> / 720</th></tr>
+  </table>
+
+  <h3>Total Marks Obtained (in Words)</h3>
+  <p id="marksWords"></p>
+
+  <h3>Cut-off Scores</h3>
+  <table>
+    <tr><th>Category</th><th>Cut-off Score</th><th>No. of Candidates</th></tr>
+    <tr><td>General</td><td>144 - 686</td><td>682406</td></tr>
+    <tr><td>OBC</td><td>113 - 143</td><td>618525</td></tr>
+    <tr><td>SC</td><td>105</td><td>178741</td></tr>
+  </table>
+</div>
+
+<script>
+function togglePassword() {
+  const pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+function numberToWords(n) {
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  if (n < 20) return a[n];
+  if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
+  if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + numberToWords(n % 100) : "");
+  return numberToWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + numberToWords(n % 1000) : "");
+}
+
+function login() {
+  const app = document.getElementById("appNo").value.trim();
+  const dob = document.getElementById("dob").value;
+  const pwd = document.getElementById("password").value;
+
+  let student;
+  if (app === "250410726268") {
+    student = {
+      name: "Rayyana Mirza",
+      father: "Sajid Beg Mirza",
+      mother: "Not Provided",
+      dob: "23-Apr-2007",
+      appNo: app,
+      rollNo: "3022103002",
+      gender: "Female",
+      category: "General",
+      photo: "./rayyana.png",
+      phy: 20,
+      chem: 30,
+      bio: 160
+    };
+  } else if (app === "23010016932373") {
+    student = {
+      name: "Abdul Rajik Beg Mirza",
+      father: "Asad Beg Mirza",
+      mother: "Rubina Mirza",
+      dob: dob,
+      appNo: app,
+      rollNo: "",
+      gender: "Male",
+      category: "OBC",
+      photo: "broken.png",
+      phy: 20,
+      chem: 20,
+      bio: 160
+    };
+  } else if (pwd.toLowerCase().includes("yousra")) {
+    student = {
+      name: "Yousra Khan",
+      father: "Mubarik Khan",
+      mother: "Yasmin Khan",
+      dob: "March 2007",
+      appNo: app,
+      rollNo: "Error",
+      gender: "Female",
+      category: "General",
+      photo: "broken.png",
+      phy: 1,
+      chem: 10,
+      bio: 132
+    };
+  } else if (app === "250411348321") {
+    student = {
+      name: "Madiha Mirza",
+      father: "Zahir",
+      mother: "Tabassum",
+      dob: "10-Apr-2007",
+      appNo: app,
+      rollNo: "3022106149",
+      gender: "Female",
+      category: "General",
+      photo: "./madiha.png",
+      phy: 5,
+      chem: 10,
+      bio: 35
+    };
+  } else {
+    alert("Invalid credentials. Please check application number and password.");
+    return;
+  }
+
+  document.getElementById("loginSection").classList.add("hidden");
+  document.getElementById("resultCard").classList.remove("hidden");
+  document.getElementById("name").textContent = student.name;
+  document.getElementById("father").textContent = student.father;
+  document.getElementById("mother").textContent = student.mother;
+  document.getElementById("dobResult").textContent = student.dob;
+  document.getElementById("appNumResult").textContent = student.appNo;
+  document.getElementById("rollNo").textContent = student.rollNo;
+  document.getElementById("phy").textContent = student.phy;
+  document.getElementById("chem").textContent = student.chem;
+  document.getElementById("bio").textContent = student.bio;
+  document.getElementById("studentPhoto").src = student.photo;
+  document.getElementById("gender").textContent = student.gender;
+  const total = student.phy + student.chem + student.bio;
+  document.getElementById("total").textContent = total;
+  document.getElementById("marksWords").textContent = numberToWords(total) + " Only";
+}
+</script>
+</body>
+</html>
